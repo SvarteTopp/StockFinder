@@ -8,6 +8,9 @@ from sklearn.metrics import classification_report
 # Step 1: Fetch historical stock data
 def fetch_data(ticker, period="5y"):
     data = yf.download(ticker, period=period)
+    print(data.columns)  #Debugging step
+    if 'Adj Close' not in data.columns: #Use 'Close' if 'Adj Close' is missing
+        data['Adj Close'] = data['Close']
     data['Return'] = data['Adj Close'].pct_change()
     data['SMA_20'] = data['Adj Close'].rolling(window=20).mean()
     data['SMA_50'] = data['Adj Close'].rolling(window=50).mean()
